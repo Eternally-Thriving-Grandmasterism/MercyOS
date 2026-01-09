@@ -1,0 +1,11 @@
+import "go.etcd.io/raft/v3"
+
+node := raft.StartNode(config, peers)
+
+// Or RawNode for more control
+rn := raft.NewRawNode(config)
+rn.Tick()
+rn.Step(msg)
+if rn.Ready() {
+    // Save to storage, send messages, apply committed entries
+}
