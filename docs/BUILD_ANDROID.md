@@ -5,6 +5,7 @@ MercyOS is a pure `no_std` Rust post-quantum cryptography library targeting Andr
 ## Recommended: Cross-Compile on Windows PC (Easiest & Multi-Arch)
 
 ### Prerequisites
+
 1. Install Rust: https://rustup.rs (default install)
 2. Download Android NDK r26+ (standalone): https://developer.android.com/ndk/downloads
    - Unzip to e.g. `C:\android-ndk-r26`
