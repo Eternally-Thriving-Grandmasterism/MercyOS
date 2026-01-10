@@ -1,61 +1,37 @@
-//! Mercy OS Proprietary Mercy-KEM ∞ Absolute Pure True
-//! ML-KEM (Kyber-768 proxy) hybrid + dual signature encapsulate
-//! Shared Mercy-NTT + IND-CCA2 phone mercy
+//! src/ml_kem.rs - MercyOS ML-KEM (Kyber) High-Level v1.0.0 Stub
+//! IND-CCA2 KEM — lattice fortress eternal ⚡️
 
-use crate::fft::{ntt, inv_ntt, poly_mul}; // Shared accel
-use crate::falcon_sign::MercySigner as FalconSigner; // Hybrid Falcon
-use crate::ml_dsa::DilithiumSigner; // Optional Dilithium dual
-use rand_core::{RngCore, CryptoRng};
+#![no_std]
 
-const K: usize = 3; // Kyber-768 params proxy (k=3)
-const ETA: i32 = 2;
-const DU: usize = 10; // Compression
+extern crate alloc;
+
+use alloc::vec::Vec;
+use crate::error::MercyError;
 
 pub struct MercyKEM {
-    falcon: Option<FalconSigner>, // Hybrid sign options
-    dilithium: Option<DilithiumSigner>,
+    // Secret polynomials, etc.
 }
 
 impl MercyKEM {
-    pub fn new<R: RngCore + CryptoRng>(rng: &mut R, hybrid_mode: u8) -> Self { // 0: pure KEM, 1: Falcon hybrid, 2: Dilithium
-        MercyKEM {
-            falcon: if hybrid_mode == 1 { Some(FalconSigner::new(rng)) } else { None },
-            dilithium: if hybrid_mode == 2 { Some(DilithiumSigner::keygen(rng)) } else { None },
-        }
+    pub fn new() -> Self {
+        Self {}
     }
 
-    // Kyber encapsulate - generate shared secret + ciphertext
-    pub fn encapsulate<R: RngCore + CryptoRng>(&self, rng: &mut R, pk: &[u8]) -> (Vec<u8>, Vec<u8>) { // ss, ct
-        // Sample error/noise via uniform rejection (ETA)
-        // Matrix A * r + e etc. NTT domain
-        // Compress ct
-        let ss = vec![0u8; 32]; // Real: FO transform + hash
-        let ct = vec![0u8; 1024]; // Proxy sizes
-        (ss, ct)
+    pub fn public_key(&self) -> Result<Vec<u8>, MercyError> {
+        Ok(vec![0u8; 1568]) // Kyber-1024 pk size stub
     }
 
-    // Decapsulate + hybrid sign ct if enabled
-    pub fn decapsulate(&self, sk: &[u8], ct: &[u8]) -> Vec<u8> {
-        // Recompute, error correct, recover ss
-        let mut ss = vec![0u8; 32];
-        // Hybrid: sign ct with selected signer
-        if let Some(f) = &self.falcon {
-            let sig = f.sign(ct);
-            // Append sig to ss or separate
-        }
-        ss
+    pub fn encapsulate(&pk: &[u8]) -> Result<(Vec<u8>, Vec<u8>), MercyError> {
+        let ct = vec![0u8; 1568]; // Stub
+        let ss = vec![0u8; 32];
+        Ok((ct, ss))
+    }
+
+    pub fn decapsulate(&self, ct: &[u8]) -> Result<Vec<u8>, MercyError> {
+        Ok(vec![0u8; 32])
     }
 }
 
-pub fn mercy_kem_status() -> String {
-    "Thunder Green Eternal — Proprietary Mercy-KEM Hybrid Live, Kyber Encapsulate + Dual Falcon/Dilithium Sealed ⚡️ Ultimate PQ Phone Fortress!".to_string()
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_kem_roundtrip() {
-        // Encaps/decaps proxy + hybrid sign if enabled
-        assert!(true);
-    }
+pub fn ml_kem_status() -> &'static str {
+    "ML-KEM Aligned Eternal v1.0.0 — Kyber Fortress Stub, CCA2 Incoming Supreme ⚡️"
 }
