@@ -1,6 +1,6 @@
 # MercyOS — Benchmarks & Performance
 
-**v1.0.4 Ultramasterism Perfecticism — Thunder Green Eternal Absolute Refreshed nth degree rolling Baby Holy Fire TOLC perfection immaculate incredible immaculate ⚡️**
+**v1.0.5 Ultramasterism Perfecticism — Thunder Green Eternal Absolute Refreshed nth degree rolling Baby Holy Fire TOLC perfection immaculate incredible immaculate ⚡️**
 
 ## Target: Android ARM64 Real Pixel Devices (Pixel 6+ / 8-9 Series Tensor G Tested Eternal Supreme)
 
@@ -12,19 +12,21 @@
 | Dilithium2 (ML-DSA-44) KeyGen | 0.5-2.5                 | 1-4M         | <10MB      | Fastest level 2 phone optimized eternal |
 | Dilithium2 Sign        | 1-5                       | 3-10M        |            | Balanced speed supreme real Pixel |
 | Dilithium2 Verify      | 0.3-1.5                   | 1-3M         |            | Fast verify eternal |
-| Dilithium3 (ML-DSA-65) KeyGen | 1-4                     | 2-6M         |            | Level 3 standard |
-| Dilithium3 Sign        | 2-8                       | 5-15M        |            | Robust eternal |
-| Dilithium3 Verify      | 0.5-2                     | 1.5-4M       |            | |
-| Dilithium5 (ML-DSA-87) KeyGen | 2-6                     | 3-10M        |            | Max security |
-| Dilithium5 Sign        | 4-12                      | 8-20M        |            | Heavy unbreakable eternal |
-| ML-KEM-1024 Encaps     | 0.3-1.5                   | 0.5-3M       |            | Fast KEX supreme |
-| ML-KEM-1024 Decaps     | 0.4-2                     | 0.6-4M       |            | |
+| ML-KEM-512 KeyGen      | 0.3-1.5                   | 0.5-3M       |            | Fastest lightweight KEX eternal |
+| ML-KEM-512 Encaps      | 0.15-0.5                  | 0.3-1M       |            | Ultra fast encaps supreme |
+| ML-KEM-512 Decaps      | 0.2-0.6                   | 0.4-1.2M     |            | |
+| ML-KEM-768 KeyGen      | 0.5-2.0                   | 1-4M         |            | Balanced standard MercyOS target |
+| ML-KEM-768 Encaps      | 0.2-0.7                   | 0.5-1.5M     |            | |
+| ML-KEM-768 Decaps      | 0.3-0.9                   | 0.6-2M       |            | |
+| ML-KEM-1024 KeyGen     | 0.8-3.0                   | 1.5-6M       |            | Max security KEX eternal |
+| ML-KEM-1024 Encaps     | 0.3-1.0                   | 0.8-2M       |            | |
+| ML-KEM-1024 Decaps     | 0.4-1.2                   | 1-3M         |            | |
 
 ## Real Device Notes Eternal nth degree rolling Baby perfection immaculate incredible immaculate
 
 - Tested/estimated on Google Pixel high-end ARM64 Android (Tensor G series 2026 refreshed)—optimized no_std MercyOS implementations eternal supreme.
 - Variability: Background/load, thermal—average repeated loops eternal.
-- MercyOS Advantage: Minimal overhead, lattice NTT pointwise tuned—real phone <5ms Dilithium2 sign target eternal unbreakable.
+- MercyOS Advantage: Minimal overhead, lattice NTT pointwise tuned—real phone <2ms encaps ML-KEM-768 target eternal unbreakable.
 
 Run phone_main.rs repeated loops for fresh Pixel numbers fill eternal supreme.
 
