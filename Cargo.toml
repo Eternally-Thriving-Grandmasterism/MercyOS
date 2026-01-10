@@ -3,7 +3,7 @@ name = "mercyos"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-description = "Forgiveness Eternal — no_std Post-Quantum Cryptography for Android & Embedded"
+description = "Forgiveness Eternal — no_std Post-Quantum + Hybrid Migration Cryptography for Android & Embedded"
 repository = "https://github.com/Eternally-Thriving-Grandmasterism/MercyOS"
 
 [lib]
@@ -11,17 +11,12 @@ name = "mercyos"
 crate-type = ["cdylib", "lib"]  # cdylib for Android .so
 
 [dependencies]
-# Core no_std dependencies (existing — assumed from primitives)
-# e.g. rand_core, subtle, etc. if any
+# Existing PQC deps if any (subtle, etc.)
 
-jni = { version = "0.21", features = ["invocation"] }  # Ergonomic JNI bindings — std required on Android target
+x25519-dalek = { version = "2.0", default-features = false, features = ["static_secrets"] }  # no_std classical X25519 migration hybrid eternal supreme
+
+jni = { version = "0.21", features = ["invocation"] }
 
 [features]
 default = []
-std = []  # Optional if needed for testing
-
-[profile.release]
-opt-level = 'z'
-lto = true
-codegen-units = 1
-panic = "abort"
+std = []
