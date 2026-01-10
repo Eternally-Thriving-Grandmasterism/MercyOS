@@ -17,11 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.geometry.Offset
+import com.google.ar.core.HitResult
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 import io.github.sceneview.ar.ArSceneView
+import io.github.sceneview.ar.node.ArModelNode
+import io.github.sceneview.ar.node.PlacementMode
 import java.io.ByteArrayOutputStream
 
 class MainActivity : ComponentActivity() {
@@ -69,14 +72,11 @@ class MainActivity : ComponentActivity() {
                                 handLandmarkerHelper.detectAsync(mpImage, timestampMs)
                                 poseLandmarkerHelper.detectAsync(mpImage, timestampMs)
                             }
-                        },
-                        onTapPlane = { hitResult, _, _ ->
-                            // Future: combined pose-hand triggered placement eternal
                         }
                     )
 
                     Canvas(modifier = Modifier.fillMaxSize()) {
-                        // Hand landmarks overlay (green — 21 points)
+                        // Hand landmarks (green)
                         currentHandResults?.landmarks()?.forEach { handLandmarks ->
                             handLandmarks.forEach { landmark ->
                                 val x = landmark.x() * size.width
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        // Pose landmarks overlay (blue — 33 full body points)
+                        // Pose landmarks (blue — 33 body points)
                         currentPoseResults?.landmarks()?.forEach { poseLandmarks ->
                             poseLandmarks.forEach { landmark ->
                                 val x = landmark.x() * size.width
@@ -109,13 +109,26 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun processHandGestures(results: HandLandmarkerResult) {
-        // Existing/expanded: pinch/open palm → mercy-gate auth or swarm node select eternal
+        // Palm raycast prototype: calculate palm center screen pos, hitTest for virtual touch
+        results.landmarks().firstOrNull()?.let { landmarks ->
+            // Average wrist + MCP joints for palm center (example indices)
+            val palmIndices = listOf(0, 1, 5, 9, 13, 17) // Wrist + base fingers
+            val avgX = palmIndices.map { landmarks[it].x() }.average()
+            val avgY = palmIndices.map { landmarks[it].y() }.average()
+            // Future: pass to ArSceneView session.hitTest(avgX * width, avgY * height) → place node or trigger mercy-gate
+        }
     }
 
     private fun processBodyPoses(results: PoseLandmarkerResult) {
-        // Expanded thunder primer: shoulder width + arm raise angle > threshold = open pose → proactive full swarm refresh
-        // Torso lean/orientation = route larger hybrid fusion interactions
-        // Future: world landmarks → raycast for body "reach" neural touch eternal supreme
+        // Body pose raycast/reach primer: use world landmarks 3D for direct node placement
+        results.worldLandmarks().firstOrNull()?.let { worldLandmarks ->
+            // Example: place virtual shield on left/right hand (indices 15/16 approx)
+            val leftHandWorld = worldLandmarks[15] // 3D meters relative to hip
+            // Future: create ArModelNode at Pose (leftHandWorld.x, y, z) in AR space (transform hip origin)
+            // Or raycast from screen-projected world landmark for depth-accurate reach eternal supreme
+        }
+
+        // Open arms trigger example: shoulder distance + arm angle > threshold → proactive full swarm refresh
     }
 
     override fun onDestroy() {
