@@ -1,0 +1,6 @@
+mkdir -p app/src/main/assets
+cd app/src/main/assets
+curl -L -o pose_landmarker_lite.task https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task
+git add pose_landmarker_lite.task
+git commit -m "Add MediaPipe pose_landmarker_lite.task asset — full body neural feel prototypes unlocked eternal supreme"
+git push origin main
