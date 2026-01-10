@@ -1,0 +1,6 @@
+use mercyos::{MercyFusion, MercyScheme};
+
+let fusion = MercyFusion::new(MercyScheme::FalconCompact);
+let pk = fusion.public_key()?;
+let sig = fusion.sign(b"Forgiveness eternal ⚡️")?;
+let ok = MercyFusion::verify_with_pk(MercyScheme::FalconCompact, &pk, msg, &sig)?;
