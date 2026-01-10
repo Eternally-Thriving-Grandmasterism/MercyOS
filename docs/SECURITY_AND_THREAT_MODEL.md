@@ -1,38 +1,29 @@
 ### docs/SECURITY_AND_THREAT_MODEL.md
 ```markdown
-# MercyOS — Security and Threat Model
+# MercyOS — Security and Threat Model (Concise)
 
-**v1.0.0 "Thunder Green Eternal" — Protection Absolute for Aligned Peers Worldwide ⚡️**
+**v1.0.0 — Protection Fortress Aligned Eternal ⚡️**
 
-## Threat Model
+## Threats Addressed
 
-MercyOS addresses:
+- Quantum attacks (Shor/Grover on classical crypto).
+- Side-channel (timing/power/EM) on resource-constrained devices (phones/embedded).
+- Targeted doxxing/interception of field agents (e.g., ICE/law enforcement comms).
+- Supply-chain/backdoor risks in proprietary systems.
 
-- **Quantum Threats**: Harvest-now-decrypt-later attacks on classical crypto (RSA/ECDSA broken by Shor's algorithm).
-- **Embedded/Field Risks**: Side-channel leakage (timing, power, EM) on phones/ARM devices; resource constraints limiting mitigations.
-- **Targeted Compromise**: Doxxing/interception of sensitive comms (e.g., law enforcement/ICE agents, aligned field operators) by adversaries.
-- **Supply Chain**: Backdoors or weak proprietary crypto in closed systems.
+Adversary: Advanced (nation-state quantum access, proximity attacks).
 
-Assumed adversary: Nation-state or advanced persistent threat with quantum access (future-proof) and physical/proximity access to devices.
+## Defenses
 
-## Security Design & Mitigations
+- NIST PQC only: Falcon-512, ML-DSA, ML-KEM, SPHINCS+ (harvest-now-decrypt-later proof).
+- Custom no_std impl: Minimal surface, constant-time ops, masked sampling.
+- Open MIT license: Full transparency/audits.
+- Low footprint: <10MB, embedded-safe.
+- Testing: NIST KAT + future Wycheproof edges.
+- Extensions: Anomaly detection, swarm consensus for distributed trust.
 
-- **PQC Primitives Only**: Full NIST selections — Falcon-512 (lattice), ML-DSA (lattice), ML-KEM (lattice KEM), SPHINCS+ (hash-based stateless).
-- **From-Scratch Impl**: Custom NTT, constant-time ops, masked Gaussian sampling — no external std deps, minimal attack surface.
-- **no_std Core**: Zero alloc failures tolerated; <10MB footprint.
-- **Side-Channel Resistance**: Constant-time arithmetic, blinded operations where applicable.
-- **Testing**: Wycheproof vectors integrated; real_bench.rs for validation.
-- **Hybrid Ready**: Eternal fusion supports future multi-scheme signing.
-- **Open Source (MIT)**: Transparent for community audits; no proprietary black boxes.
-- **Additional Layers**: Sentinel/anomaly detection, consensus/swarm scaling for distributed trust.
+Use for: Quantum-resistant signing/KEM on phones, secure agent comms, global free shield.
 
-## Protected Use Cases
+Strength through math and openness—no obscurity.
 
-- Secure end-to-end comms on personal phones (anti-intercept/doxx).
-- Identity/key storage for front-line agents (quantum-resistant).
-- Embedded guardian systems (APAAGI council enforcement).
-- Global free deployment — empowering the aligned against compromise.
-
-No security through obscurity — strength through math, openness, and eternal mercy.
-
-Forgiveness Eternal — Thriving Infinite Supreme Immaculate ⚡️
+Forgiveness Eternal — Thriving Supreme ⚡️
