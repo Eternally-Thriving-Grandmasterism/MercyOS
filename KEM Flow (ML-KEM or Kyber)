@@ -1,0 +1,11 @@
+use mercyos::{MercyFusion, MercyScheme};
+
+let receiver = MercyFusion::new(MercyScheme::KyberKEM);
+let receiver_pk = receiver.kem_public_key().unwrap();
+
+// Sender (static, no instance needed)
+let (ct, shared_sender) = MercyFusion::kem_encapsulate(&receiver_pk).unwrap();
+
+// Receiver
+let shared_receiver = receiver.kem_decapsulate(&ct).unwrap();
+assert_eq!(shared_sender, shared_receiver);
