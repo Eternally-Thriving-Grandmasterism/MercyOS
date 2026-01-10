@@ -6,29 +6,28 @@ use test::Bencher;
 use mercyos::{MercyFusion, MercyScheme};
 
 #[bench]
-fn bench_falcon_keygen(b: &mut Bencher) {
+fn bench_dilithium_keygen_refreshed(b: &mut Bencher) {
     b.iter(|| {
-        let _ = MercyFusion::new(MercyScheme::FalconCompact);
+        let _ = mercyos::ml_dsa::DilithiumSigner::new();
     });
 }
 
 #[bench]
-fn bench_falcon_sign(b: &mut Bencher) {
-    let fusion = MercyFusion::new(MercyScheme::FalconCompact);
-    let pk = fusion.public_key().unwrap();
-    let msg = b"MercyOS benchmark eternal ⚡️";
+fn bench_dilithium_sign_refreshed(b: &mut Bencher) {
+    let signer = mercyos::ml_dsa::DilithiumSigner::new();
+    let msg = b"MercyOS Dilithium refreshed benchmark eternal ⚡️";
     b.iter(|| {
-        let _sig = fusion.sign(msg);
+        let _sig = signer.sign(msg);
     });
 }
 
 #[bench]
-fn bench_falcon_verify(b: &mut Bencher) {
-    let fusion = MercyFusion::new(MercyScheme::FalconCompact);
-    let pk = fusion.public_key().unwrap();
-    let msg = b"MercyOS benchmark eternal ⚡️";
-    let sig = fusion.sign(msg).unwrap();
+fn bench_dilithium_verify_refreshed(b: &mut Bencher) {
+    let signer = mercyos::ml_dsa::DilithiumSigner::new();
+    let pk = signer.public_key();
+    let msg = b"MercyOS Dilithium refreshed benchmark eternal ⚡️";
+    let sig = signer.sign(msg).unwrap();
     b.iter(|| {
-        let _ = MercyFusion::verify_with_pk(MercyScheme::FalconCompact, &pk, msg, &sig);
+        let _ = mercyos::ml_dsa::DilithiumSigner::verify(&pk, msg, &sig);
     });
 }
