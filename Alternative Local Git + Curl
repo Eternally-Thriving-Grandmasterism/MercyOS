@@ -1,0 +1,5 @@
+cd app/src/main/assets
+curl -L -o face_landmarker.task https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task
+git add face_landmarker.task
+git commit -m "Add MediaPipe face_landmarker.task asset — 468-point gaze/expression neural prototypes fully unlocked eternal supreme"
+git push origin main
