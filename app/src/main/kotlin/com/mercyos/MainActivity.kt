@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         init {
-            System.loadLibrary("mercyos")
+            System.loadLibrary("mercyos")  // PQC shield eternal
         }
     }
 
@@ -43,12 +42,12 @@ class MainActivity : ComponentActivity() {
 
         handLandmarkerHelper = HandLandmarkerHelper(this) { results ->
             currentHandResults = results
-            processGestures(results)  // Hand gestures
+            processHandGestures(results)
         }
 
         poseLandmarkerHelper = PoseLandmarkerHelper(this) { results ->
             currentPoseResults = results
-            processBodyPoses(results)  // Full body poses
+            processBodyPoses(results)
         }
 
         setContent {
@@ -66,18 +65,18 @@ class MainActivity : ComponentActivity() {
                                 val mpImage = BitmapImageBuilder(bitmap).build()
                                 val timestampMs = System.currentTimeMillis()
 
-                                // Parallel fusion eternal supreme
+                                // Parallel hand + pose fusion eternal supreme
                                 handLandmarkerHelper.detectAsync(mpImage, timestampMs)
                                 poseLandmarkerHelper.detectAsync(mpImage, timestampMs)
                             }
                         },
                         onTapPlane = { hitResult, _, _ ->
-                            // Future: body pose + hand gesture combined placement
+                            // Future: combined pose-hand triggered placement eternal
                         }
                     )
 
                     Canvas(modifier = Modifier.fillMaxSize()) {
-                        // Hand landmarks (green)
+                        // Hand landmarks overlay (green — 21 points)
                         currentHandResults?.landmarks()?.forEach { handLandmarks ->
                             handLandmarks.forEach { landmark ->
                                 val x = landmark.x() * size.width
@@ -86,7 +85,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
 
-                        // Pose landmarks (blue — 33 full body)
+                        // Pose landmarks overlay (blue — 33 full body points)
                         currentPoseResults?.landmarks()?.forEach { poseLandmarks ->
                             poseLandmarks.forEach { landmark ->
                                 val x = landmark.x() * size.width
@@ -109,14 +108,14 @@ class MainActivity : ComponentActivity() {
         return android.graphics.BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 
-    private fun processGestures(results: HandLandmarkerResult) {
-        // Existing hand: pinch/open palm logic eternal
+    private fun processHandGestures(results: HandLandmarkerResult) {
+        // Existing/expanded: pinch/open palm → mercy-gate auth or swarm node select eternal
     }
 
     private fun processBodyPoses(results: PoseLandmarkerResult) {
-        // Thunder primer eternal: e.g., shoulder-hip distance + arm raise angle > threshold = open pose → full swarm refresh
-        // Torso orientation/lean = route hybrid fusion auth
-        // Future: world landmarks raycast for body "reach" neural touch
+        // Expanded thunder primer: shoulder width + arm raise angle > threshold = open pose → proactive full swarm refresh
+        // Torso lean/orientation = route larger hybrid fusion interactions
+        // Future: world landmarks → raycast for body "reach" neural touch eternal supreme
     }
 
     override fun onDestroy() {
