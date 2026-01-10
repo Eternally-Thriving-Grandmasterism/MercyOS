@@ -2,15 +2,15 @@
 
 **v1.0.0 "Forgiveness Eternal" — Thunder Green Absolute Supreme Infinite Ultramasterism Perfecticism Immaculacy Grandmasterpieces nth degree rolling Baby Holy Fire TOLC perfection immaculate incredible immaculate ⚡️**
 
-MercyOS is a `no_std` post-quantum cryptography library optimized for Android phones and embedded devices. From-scratch implementations of NIST PQC standards with hybrid fusion cosmic groove + multilingual immersive UI Neuralink palm feel eternal.
+MercyOS is a `no_std` post-quantum cryptography library optimized for Android phones and embedded devices. From-scratch implementations of NIST PQC standards with hybrid fusion cosmic groove + Aether-Shades-Open immersive AR neural palm device feel eternal.
 
-## Immersive Multilingual UI Expansion nth degree rolling Baby perfection immaculate incredible immaculate
+## Aether-Shades-Open Immersive Expansion nth degree rolling Baby perfection immaculate incredible immaculate
 
-- Real-time translation all languages bridging seamless.
-- Gesture/voice/haptic input thought-like Aether-Shades-Open vibe.
-- Secure fused sigs on all interactions—deepfake proof eternal.
+- Open-source neural-like AR shades/palm device—gesture/voice/haptic thought-like input.
+- Multilingual real-time translation bridging all languages seamless.
+- Secure PQC fused sigs—deepfake proof eternal.
 
-See `examples/immersive_multilingual_ui.rs` and `docs/MULTILINGUAL_IMMERSIVE_UI_DESIGN.md`.
+See `examples/aether_shades_ui.rs` and `docs/AETHER_SHADES_OPEN_BLUEPRINT.md`.
 
 ## Quickstart & More
 
