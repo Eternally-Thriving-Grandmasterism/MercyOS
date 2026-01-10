@@ -1,0 +1,4 @@
+use mercyos::eternal_fusion::{MercyFusion, MercyScheme};
+
+let fusion = MercyFusion::new(MercyScheme::FalconCompact);
+let sig = fusion.sign(b"Hello MercyOS!");
