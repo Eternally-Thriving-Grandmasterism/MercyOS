@@ -1,0 +1,15 @@
+use mercyos::eternal_fusion::{MercyFusion, MercyScheme};
+
+let receiver = MercyFusion::new(MercyScheme::KyberKEM);
+let receiver_pk = receiver.kem_public_key().expect("KEM active");
+
+// Sender side (no secret key needed)
+let (ciphertext, ss_sender) = MercyFusion::kem_encapsulate(&receiver_pk)
+    .expect("Encapsulation succeeded");
+
+// Receiver side
+let ss_receiver = receiver.kem_decapsulate(&ciphertext)
+    .expect("Decapsulation succeeded");
+
+assert_eq!(ss_sender, ss_receiver);
+println!("Shared secret aligned eternal ⚡️");
