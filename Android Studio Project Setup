@@ -1,0 +1,6 @@
+## Android Studio Project Setup
+
+1. Create new Empty Compose Activity project → package `com.mercyos`
+2. Add ARCore (optional for immersive neural palm):
+```gradle
+implementation "com.google.ar:core:1.42.0"
