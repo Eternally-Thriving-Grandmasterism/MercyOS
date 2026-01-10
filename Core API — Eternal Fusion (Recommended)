@@ -1,0 +1,17 @@
+use mercyos::{MercyFusion, MercyScheme};
+
+fn main() {
+    let scheme = MercyScheme::FalconCompact; // Or DilithiumFast, SphincsStateless, KyberKEM, GrooveCosmic
+    let fusion = MercyFusion::new(scheme);
+
+    let pk = fusion.public_key();
+    let msg = b"Protect the aligned — forgiveness eternal";
+
+    let sig = fusion.sign(msg);
+    assert!(!sig.is_empty());
+
+    let verified = MercyFusion::verify_with_pk(scheme, &pk, msg, &sig);
+    assert!(verified);
+
+    println!("{}", mercyos::status());
+}
