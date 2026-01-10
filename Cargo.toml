@@ -1,0 +1,26 @@
+# Cargo.toml - MercyOS No_Std Phone Mercy
+[package]
+name = "mercyos"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Forgiveness. Eternal PQC Fortress"
+
+[dependencies]
+rand_core = { version = "0.6", features = ["getrandom"] }
+sha3 = "0.10"
+
+[features]
+default = ["std"]
+std = []
+no_std = []
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[[example]]
+name = "phone_main"
+required-features = ["no_std"]
