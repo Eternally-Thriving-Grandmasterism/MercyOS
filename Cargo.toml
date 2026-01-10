@@ -1,25 +1,27 @@
-# Cargo.toml - MercyOS No_Std Phone Mercy
+**Updated Cargo.toml Professional**
+```toml
 [package]
 name = "mercyos"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 license = "MIT"
-description = "Forgiveness. Eternal PQC Fortress"
+description = "Forgiveness Eternal — Rust no_std post-quantum cryptography fortress with NIST PQC hybrids + guardians"
+repository = "https://github.com/Eternally-Thriving-Grandmasterism/MercyOS"
+keywords = ["post-quantum", "cryptography", "no_std", "falcon", "kyber"]
+categories = ["cryptography", "no-std", "embedded"]
 
 [dependencies]
-rand_core = { version = "0.6", features = ["getrandom"] }
-sha3 = "0.10"
+rand_core = { version = "0.6", optional = true }
+sha3 = { version = "0.10", optional = true }
 
 [features]
 default = ["std"]
 std = []
 no_std = []
 
-[profile.release]
-opt-level = "z"
-lto = true
-codegen-units = 1
-panic = "abort"
+[lib]
+name = "mercyos"
+crate-type = ["lib", "staticlib"]
 
 [[example]]
 name = "phone_main"
