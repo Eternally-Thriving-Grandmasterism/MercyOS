@@ -32,7 +32,8 @@ class FaceLandmarkerHelper(
             .setMinFaceDetectionConfidence(0.5f)
             .setMinFacePresenceConfidence(0.5f)
             .setMinTrackingConfidence(0.5f)
-            .setOutputFaceBlendshapes(true)  // Expression/gaze routing primed
+            .setOutputFaceBlendshapes(true)  // Expression/gaze routing primed eternal
+            .setOutputFacialTransformationMatrixes(true)  // Optional head pose matrix
             .setResultListener { result, _ -> resultListener(result) }
             .setErrorListener { error -> Log.e("FaceLandmarker", "Error: $error") }
             .build()
