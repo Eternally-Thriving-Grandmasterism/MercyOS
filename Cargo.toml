@@ -1,28 +1,33 @@
-**Updated Cargo.toml Professional**
-```toml
 [package]
 name = "mercyos"
 version = "1.0.0"
 edition = "2021"
+authors = ["Eternally Thriving Grandmasterism <alpha@pro.mega>"]
+description = "MercyOS: no_std Post-Quantum Cryptography Fortress — Forgiveness Eternal Thunder Green Absolute"
 license = "MIT"
-description = "Forgiveness Eternal — Rust no_std post-quantum cryptography fortress with NIST PQC hybrids + guardians"
 repository = "https://github.com/Eternally-Thriving-Grandmasterism/MercyOS"
-keywords = ["post-quantum", "cryptography", "no_std", "falcon", "kyber"]
-categories = ["cryptography", "no-std", "embedded"]
+keywords = ["post-quantum", "cryptography", "no_std", "falcon", "pqc"]
+categories = ["cryptography", "embedded", "no-std"]
 
 [dependencies]
-rand_core = { version = "0.6", optional = true }
-sha3 = { version = "0.10", optional = true }
+alloc = { version = "1.0", optional = true }
 
 [features]
 default = ["std"]
 std = []
-no_std = []
+no_std = ["alloc"]
+
+[dev-dependencies]
+hex = "0.4"
 
 [lib]
-name = "mercyos"
-crate-type = ["lib", "staticlib"]
+crate-type = ["staticlib", "cdylib", "rlib"]  # For NDK .so + normal lib
 
-[[example]]
-name = "phone_main"
-required-features = ["no_std"]
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"  # Embedded-friendly
+
+[profile.dev]
+overflow-checks = true
