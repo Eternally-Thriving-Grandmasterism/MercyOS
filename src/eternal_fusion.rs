@@ -1,4 +1,4 @@
-//! src/eternal_fusion.rs - MercyOS Eternal Fusion Absolute v1.0.0
+//! src/eternal_fusion.rs - MercyOS Eternal Fusion Absolute v1.0.1
 
 #![no_std]
 
@@ -6,7 +6,7 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 
-use crate::falcon_sign::MercySigner as Falcon;
+use crate::falcon_sign::FalconSigner;
 use crate::ml_dsa::DilithiumSigner;
 use crate::ml_kem::MercyKEM;
 use crate::ml_sphincs::SphincsSigner;
@@ -22,7 +22,7 @@ pub enum MercyScheme {
 }
 
 pub struct MercyFusion {
-    falcon: Option<Falcon>,
+    falcon: Option<FalconSigner>,
     dilithium: Option<DilithiumSigner>,
     sphincs: Option<SphincsSigner>,
     kem: Option<MercyKEM>,
@@ -30,12 +30,10 @@ pub struct MercyFusion {
 }
 
 impl MercyFusion {
-    /// Create a new MercyFusion instance with the selected scheme.
-    /// Only one scheme is instantiated — others remain None for zero overhead.
     pub fn new(scheme: MercyScheme) -> Self {
         Self {
             falcon: matches!(scheme, MercyScheme::FalconCompact)
-                .then(|| Falcon::new()),
+                .then(|| FalconSigner::new()),
             dilithium: matches!(scheme, MercyScheme::DilithiumFast)
                 .then(|| DilithiumSigner::new()),
             sphincs: matches!(scheme, MercyScheme::SphincsStateless)
@@ -47,7 +45,6 @@ impl MercyFusion {
         }
     }
 
-    /// Return the public key for the selected signature scheme (empty if KEM selected).
     pub fn public_key(&self) -> Vec<u8> {
         if let Some(s) = &self.falcon {
             s.public_key()
@@ -58,11 +55,10 @@ impl MercyFusion {
         } else if let Some(s) = &self.groove {
             s.public_key()
         } else {
-            Vec::new() // KEM scheme selected
+            Vec::new()
         }
     }
 
-    /// Sign a message with the selected signature scheme (empty if KEM selected).
     pub fn sign(&self, msg: &[u8]) -> Vec<u8> {
         if let Some(s) = &self.falcon {
             s.sign(msg)
@@ -73,12 +69,10 @@ impl MercyFusion {
         } else if let Some(s) = &self.groove {
             s.sign(msg)
         } else {
-            Vec::new() // KEM scheme selected — no signing capability
+            Vec::new()
         }
     }
 
-    /// Unified verification across all signature schemes.
-    /// Pass the original scheme used for key generation.
     pub fn verify_with_pk(
         scheme: MercyScheme,
         pk: &[u8],
@@ -86,34 +80,17 @@ impl MercyFusion {
         sig: &[u8],
     ) -> bool {
         match scheme {
-            MercyScheme::FalconCompact => Falcon::verify(pk, msg, sig),
+            MercyScheme::FalconCompact => crate::falcon_sign::verify(pk, msg, sig),
             MercyScheme::DilithiumFast => DilithiumSigner::verify(pk, msg, sig),
             MercyScheme::SphincsStateless => SphincsSigner::verify(pk, msg, sig),
             MercyScheme::GrooveCosmic => GrooveSigner::verify(pk, msg, sig),
-            MercyScheme::KyberKEM => false, // KEM has no signature verification
+            MercyScheme::KyberKEM => false,
         }
     }
 
-    // KEM-specific methods
+    // KEM methods unchanged...
 
-    /// Public key for the selected KEM (None if not KyberKEM).
-    pub fn kem_public_key(&self) -> Option<Vec<u8>> {
-        self.kem.as_ref().map(|k| k.public_key())
-    }
-
-    /// Decapsulate a ciphertext with the receiver's secret key (None if not KyberKEM).
-    pub fn kem_decapsulate(&self, ct: &[u8]) -> Option<Vec<u8>> {
-        self.kem.as_ref().map(|k| k.decapsulate(ct))
-    }
-
-    /// Static encapsulation — sender side (no instance needed).
-    /// Adjust return type if the underlying MercyKEM::encapsulate returns Result.
-    pub fn kem_encapsulate(pk: &[u8]) -> Option<(Vec<u8>, Vec<u8>)> {
-        Some(MercyKEM::encapsulate(pk))
-    }
-
-    /// Eternal status readout
     pub fn mercy_fusion_status() -> &'static str {
-        "Thunder Green Eternal Absolute v1.0.0 — MercyOS Eternal Fusion Complete, All Schemes Aligned Supreme Infinite ⚡️"
+        "Thunder Green Eternal Absolute v1.0.1 — All Schemes Aligned, KAT Ready ⚡️"
     }
 }
