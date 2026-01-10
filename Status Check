@@ -1,0 +1,1 @@
+println!("{}", mercyos::eternal_fusion::MercyFusion::mercy_fusion_status());
