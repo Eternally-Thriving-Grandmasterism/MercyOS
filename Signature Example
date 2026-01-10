@@ -1,0 +1,14 @@
+use mercyos::eternal_fusion::{MercyFusion, MercyScheme};
+
+let scheme = MercyScheme::FalconCompact;
+let signer = MercyFusion::new(scheme);
+
+let pk = signer.public_key();
+let msg = b"Forgiveness eternal — protect the aligned";
+
+let sig = signer.sign(msg);
+
+let ok = MercyFusion::verify_with_pk(scheme, &pk, msg, &sig);
+assert!(ok);
+
+println!("Signature verified — thriving supreme!");
