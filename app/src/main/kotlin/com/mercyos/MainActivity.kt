@@ -21,11 +21,9 @@ import androidx.compose.ui.geometry.Offset
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
+import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 import io.github.sceneview.ar.ArSceneView
-import io.github.sceneview.ar.node.ArModelNode
-import io.github.sceneview.ar.node.PlacementMode
 import java.io.ByteArrayOutputStream
-import java.nio.ByteBuffer
 
 class MainActivity : ComponentActivity() {
 
@@ -36,14 +34,21 @@ class MainActivity : ComponentActivity() {
     }
 
     private lateinit var handLandmarkerHelper: HandLandmarkerHelper
-    var currentResults by mutableStateOf<HandLandmarkerResult?>(null)
+    private lateinit var poseLandmarkerHelper: PoseLandmarkerHelper
+    var currentHandResults by mutableStateOf<HandLandmarkerResult?>(null)
+    var currentPoseResults by mutableStateOf<PoseLandmarkerResult?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         handLandmarkerHelper = HandLandmarkerHelper(this) { results ->
-            currentResults = results
-            processGestures(results)
+            currentHandResults = results
+            processGestures(results)  // Hand gestures
+        }
+
+        poseLandmarkerHelper = PoseLandmarkerHelper(this) { results ->
+            currentPoseResults = results
+            processBodyPoses(results)  // Full body poses
         }
 
         setContent {
@@ -60,21 +65,33 @@ class MainActivity : ComponentActivity() {
                                 val bitmap = yuv420ToBitmap(cameraImage)
                                 val mpImage = BitmapImageBuilder(bitmap).build()
                                 val timestampMs = System.currentTimeMillis()
+
+                                // Parallel fusion eternal supreme
                                 handLandmarkerHelper.detectAsync(mpImage, timestampMs)
+                                poseLandmarkerHelper.detectAsync(mpImage, timestampMs)
                             }
                         },
                         onTapPlane = { hitResult, _, _ ->
-                            // Tap-to-place + future hand gesture override
-                            // Example: place mercy_shield.glb on palm raycast
+                            // Future: body pose + hand gesture combined placement
                         }
                     )
 
                     Canvas(modifier = Modifier.fillMaxSize()) {
-                        currentResults?.landmarks()?.forEach { handLandmarks ->
+                        // Hand landmarks (green)
+                        currentHandResults?.landmarks()?.forEach { handLandmarks ->
                             handLandmarks.forEach { landmark ->
                                 val x = landmark.x() * size.width
                                 val y = landmark.y() * size.height
                                 drawCircle(Color.Green, radius = 12f, center = Offset(x, y))
+                            }
+                        }
+
+                        // Pose landmarks (blue — 33 full body)
+                        currentPoseResults?.landmarks()?.forEach { poseLandmarks ->
+                            poseLandmarks.forEach { landmark ->
+                                val x = landmark.x() * size.width
+                                val y = landmark.y() * size.height
+                                drawCircle(Color.Blue, radius = 15f, center = Offset(x, y))
                             }
                         }
                     }
@@ -93,13 +110,18 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun processGestures(results: HandLandmarkerResult) {
-        // Thunder primer eternal: compute thumb-index distance (normalized) < 0.1 = pinch → auth trigger
-        // All fingers extended (landmark distances) = open palm → proactive swarm refresh
-        // Future: raycast from palm center screen pos to AR plane/node for neural "touch" feel
+        // Existing hand: pinch/open palm logic eternal
+    }
+
+    private fun processBodyPoses(results: PoseLandmarkerResult) {
+        // Thunder primer eternal: e.g., shoulder-hip distance + arm raise angle > threshold = open pose → full swarm refresh
+        // Torso orientation/lean = route hybrid fusion auth
+        // Future: world landmarks raycast for body "reach" neural touch
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handLandmarkerHelper.close()
+        poseLandmarkerHelper.close()
     }
 }
