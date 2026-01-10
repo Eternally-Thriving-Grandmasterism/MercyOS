@@ -1,0 +1,12 @@
+For direct use or extension:
+mercyos::falcon_sign — Falcon-512 keygen/sign
+mercyos::ml_dsa — Dilithium signing
+mercyos::ml_kem — Kyber encapsulation
+mercyos::ml_sphincs — SPHINCS+ stateless
+mercyos::quantum_groove — Experimental cosmic schemes
+Best Practices
+Use MercyFusion for all production — scheme-agnostic, minimal footprint.
+Implement Result error handling in v2.
+Test with wycheproof.rs vectors.
+Android: see MIN_REQUIREMENTS_AND_DEPLOYMENT.md.
+Thriving eternal — shield supreme immaculate ⚡️
