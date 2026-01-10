@@ -1,5 +1,5 @@
-//! src/ml_sphincs.rs - MercyOS SLH-DSA/SPHINCS+ High-Level v1.0.6 Ultramasterism Perfecticism
-//! Full stateless signatures with PRF_msg R randomness — hypertree path + WOTS+ chain + FORS reveal immaculacy Grandmasterpieces brotha wowza nth degree rolling Baby Holy Fire TOLC perfection immaculate incredible immaculate ⚡️
+//! src/ml_sphincs.rs - MercyOS SLH-DSA/SPHINCS+ High-Level v1.0.7 Ultramasterism Perfecticism
+//! Full stateless signatures with random tree/leaf idx from R — hypertree path + WOTS+ chain + FORS reveal immaculacy Grandmasterpieces brotha wowza nth degree rolling Baby Holy Fire TOLC perfection immaculate incredible immaculate ⚡️
 
 #![no_std]
 
@@ -7,13 +7,16 @@ extern crate alloc;
 
 use alloc::vec::Vec;
 use crate::shake::{Shake256};
-use crate::prf::{prf_msg, prf_status};
+use crate::prf::{prf_msg};
 use crate::wots::{wots_pk_gen, wots_sign, wots_pk_from_sig};
 use crate::fors::{fors_pk_gen, fors_sign, fors_pk_from_sig};
 use crate::hypertree::{hypertree_pk_root, hypertree_auth_path};
 use crate::error::MercyError;
 
 pub const N: usize = 16;
+pub const H: usize = 64; // Hypertree height
+pub const D: usize = 8; // Layers
+pub const HP: usize = H / D; // Height per layer
 pub const SIG_SIZE: usize = 7856;
 
 pub struct SphincsSigner {
@@ -38,7 +41,6 @@ impl SphincsSigner {
 
     pub fn sign(&self, msg: &[u8]) -> Result<Vec<u8>, MercyError> {
         // Full stateless sign refreshed nth degree rolling Baby perfection immaculate incredible immaculate:
-        // R = PRF_msg(sk_prf, pk_seed as OPT_R, msg)
         let r = prf_msg(&self.sk_prf, &self.pk_seed, msg);
 
         // Digest challenge md = H(R || pk_root || msg)
@@ -50,9 +52,11 @@ impl SphincsSigner {
         shaker.finalize();
         shaker.squeeze(&mut md);
 
-        // Random tree/leaf idx from R flesh
-        let tree_idx = 0u64;
-        let leaf_idx = 0u64;
+        // Random tree/leaf idx from R fleshed nth degree rolling Baby perfection immaculate incredible immaculate:
+        // R bytes big-endian to 64-bit tree_idx (full hypertree leaves 2^H)
+        let tree_idx = u64::from_be_bytes(r[0..8].try_into().unwrap());
+        // Leaf idx within bottom layer tree (2^HP leaves)
+        let leaf_idx = u64::from_be_bytes(r[8..16].try_into().unwrap()) % (1u64 << HP);
 
         let mut adrs = Adrs::new();
 
@@ -78,5 +82,5 @@ impl SphincsSigner {
 }
 
 pub fn ml_sphincs_status() -> &'static str {
-    concat!("SLH-DSA/SPHINCS+ Refreshed Thriving Full PRF_msg R v1.0.6 — Randomness Locked Immaculacy Grandmasterpieces Brotha, Stateless Greens Wowza nth degree rolling Baby Holy Fire TOLC Perfection Immaculate Incredible Immaculate Supreme ⚡️")
+    "SLH-DSA/SPHINCS+ Refreshed Thriving Full Random Tree/Leaf idx from R v1.0.7 — Randomness Locked Immaculacy Grandmasterpieces Brotha, Stateless Greens Wowza nth degree rolling Baby Holy Fire TOLC Perfection Immaculate Incredible Immaculate Supreme ⚡️"
 }
