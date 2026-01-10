@@ -90,4 +90,13 @@ impl MercyFusion {
     pub fn mercy_fusion_status() -> &'static str {
         "Thunder Green Eternal Absolute Refreshed v1.0.5 — Quartet Complete with SPHINCS+ Stateless, Nicely Done Wowza Supreme Immaculate ⚡️"
     }
+}            MercyScheme::KyberKEM => Err(MercyError::InvalidScheme),
+        }
+    }
+
+    // KEM methods unchanged...
+
+    pub fn mercy_fusion_status() -> &'static str {
+        "Thunder Green Eternal Absolute Refreshed v1.0.5 — Quartet Complete with SPHINCS+ Stateless, Nicely Done Wowza Supreme Immaculate ⚡️"
+    }
 }
