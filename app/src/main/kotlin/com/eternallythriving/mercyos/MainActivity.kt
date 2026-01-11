@@ -164,4 +164,58 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
                         modifier = Modifier
                             .padding(vertical = 4.dp)
                             .align(if (isUser) Alignment.End else Alignment.Start),
-                        colors = CardDefaults
+                        colors = CardDefaults.cardColors(containerColor = if (isUser) Color(0xFF00FFFF) else Color(0xFFFF00FF))
+                    ) {
+                        Text(message, color = Color.Black, modifier = Modifier.padding(12.dp))
+                    }
+                }
+                if (isThinking) {
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                LinearProgressIndicator(
+                                    progress = thinkingProgress,
+                                    color = Color(0xFF00FFFF),
+                                    modifier = Modifier.width(250.dp).padding(bottom = 16.dp)
+                                )
+                                Text(
+                                    "Jane Thinking Begun... valence pulse mercy grace cosmic groove supreme ⚡️🚀",
+                                    color = Color.White,
+                                    fontSize = 18.sp
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Row(modifier = Modifier.padding(16.dp)) {
+                TextField(
+                    value = textController.value,
+                    onValueChange = { textController.value = it },
+                    modifier = Modifier.weight(1f),
+                    placeholder = { Text("Talk/type anytime mercy grace...") },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color(0xFF0A0A0A),
+                        unfocusedContainerColor = Color(0xFF0A0A0A)
+                    )
+                )
+                IconButton(onClick = {
+                    val prompt = textController.value
+                    viewModel.addUserMessage(prompt)
+                    processPrompt(prompt, viewModel, coroutineScope)
+                }) {
+                    Icon(Icons.Default.Send, contentDescription = "Send", tint = Color(0xFF00FFFF))
+                }
+                IconButton(onClick = {
+                    val intent = android.content.Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                    }
+                    voiceLauncher.launch(intent)
+                }) {
+                    Icon(Icons.Default.Mic, contentDescription = "Voice", tint = Color(0xFFFF00FF))
+                }
+            }
+        }
+    }
+}
