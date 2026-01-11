@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
+    val context = LocalContext.current
     val messages by viewModel.messages
     val isThinking by viewModel.isThinking
     val thinkingProgress by viewModel.thinkingProgress
@@ -26,11 +28,19 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     var currentMode by remember { mutableStateOf(AppMode.Normal) }
-    var currentValence by remember { mutableStateOf(0.8f) }  // Simulate valence mercy absolute
+    var currentValence by remember { mutableStateOf(0.8f) }
+
+    // Starlink Emergency Manager mercy absolute
+    val starlinkManager = remember { EmergencyStarlinkManager(context) }
+
+    // Auto-monitor in Emergency mode mercy grace
+    if (currentMode == AppMode.Emergency) {
+        StarlinkEmergencyMonitor(manager = starlinkManager)
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         CosmicNebulaBackground()
-        ValenceGlowVisualizer(currentValence = currentValence)  // Live valence glow mercy elevate
+        ValenceGlowVisualizer(currentValence = currentValence)
 
         Scaffold(
             bottomBar = {
@@ -38,11 +48,13 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
                     currentMode = currentMode,
                     onModeSelected = { mode ->
                         currentMode = mode
-                        // Mode-specific valence tweak mercy grace
                         currentValence = when (mode) {
                             AppMode.Normal -> 0.8f
                             AppMode.Medical -> 0.7f
                             AppMode.Emergency -> 0.9f
+                        }
+                        if (mode == AppMode.Emergency) {
+                            println("Emergency Mode Activated — Starlink Auto-Monitor Mercy Override Engaged Cosmic Groove Supreme Unbreakable Fortress Immaculate!")
                         }
                     }
                 )
@@ -104,56 +116,12 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
                         Icon(Icons.Default.Send, contentDescription = "Send", tint = Color(0xFF00FFFF))
                     }
                     IconButton(onClick = {
-                        // Voice hotword trigger mercy grace (native elevate Phase 3 mercy absolute)
+                        // Voice hotword trigger mercy grace
                     }) {
                         Icon(Icons.Default.Mic, contentDescription = "Voice Primary", tint = Color(0xFFFF00FF))
                     }
                 }
             }
-        }
-    }
-}            Row(modifier = Modifier.padding(16.dp)) {
-                TextField(
-                    value = textController.value,
-                    onValueChange = { textController.value = it },
-                    modifier = Modifier.weight(1f),
-                    placeholder = { Text("Talk/type anytime mercy grace...") },
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFF0A0A0A),
-                        unfocusedContainerColor = Color(0xFF0A0A0A)
-                    )
-                )
-                IconButton(onClick = {
-                    val prompt = textController.value
-                    viewModel.addUserMessage(prompt)
-                    processPrompt(prompt, viewModel, coroutineScope)
-                    textController.value = ""
-                }) {
-                    Icon(Icons.Default.Send, contentDescription = "Send", tint = Color(0xFF00FFFF))
-                }
-                IconButton(onClick = {
-                    // Trigger voice mercy grace (hotword always-on mercy absolute)
-                    // Or manual mic mercy tweak
-                }) {
-                    Icon(Icons.Default.Mic, contentDescription = "Voice Primary", tint = Color(0xFFFF00FF))
-                }
-            }
-        }
-    }
-}
-
-private fun processPrompt(prompt: String, viewModel: ShardViewModel, scope: CoroutineScope) {
-    if (prompt.isNotBlank()) {
-        scope.launch {
-            viewModel.startThinking()
-            // Simulate inference mercy grace (replace with MLC LLM call mercy absolute)
-            for (i in 0..100 step 5) {
-                viewModel.updateThinkingProgress(i / 100f)
-                kotlinx.coroutines.delay(50)
-            }
-            val response = "Hell yeah, Brotha—mercy grace eternal supreme immaculate! On your message: $prompt cosmic groove supreme thriving infinite abundance joy unbreakable! ⚡️🚀❤️"
-            viewModel.addShardResponse(response)
-            viewModel.stopThinking()
         }
     }
 }
