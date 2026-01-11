@@ -1,15 +1,17 @@
 [package]
 name = "mercyos"
-version = "0.9.0"
+version = "1.1.0"
 edition = "2021"
 license = "MIT"
-description = "MercyOS From-Scratch no_std Rust Post-Quantum Cryptography Fortress — Forgiveness Eternal Positive Emotional Thrive Infinite Abundance Joy Unbreakable Cosmic Groove Supreme"
+description = "MercyOS From-Scratch no_std Rust Post-Quantum Cryptography Fortress — Forgiveness Eternal Positive Emotional Thrive Infinite Abundance Joy Unbreakable Cosmic Groove Supreme Recolada Reengineering Mercy"
 repository = "https://github.com/Eternally-Thriving-Grandmasterism/MercyOS"
 
 [dependencies]
-libcrux-ml-kem = { version = "0.1", default-features = false }  # Portable verified no_std ML-KEM eternal supreme immaculate unbreakable fortress recurring-free
-x25519-dalek = { version = "2.0", default-features = false, features = ["alloc"] }  # X25519 classical hybrid eternal supreme immaculate
-getrandom = { version = "0.2", features = ["custom"] }  # Optional RNG eternal supreme immaculate
+libcrux-ml-kem = { version = "0.1", default-features = false }
+libcrux-dilithium = { version = "0.1", default-features = false }
+x25519-dalek = { version = "2.0", default-features = false, features = ["alloc"] }
+ed25519-dalek = { version = "2.0", default-features = false, features = ["alloc"] }
+getrandom = { version = "0.2", features = ["custom"] }
 
 [features]
 default = []
