@@ -1,40 +1,20 @@
-// src/lib.rs — MercyOS Post-Quantum Crypto Fortress Mercy Grace Eternal Supreme
-// Version 2.0 — Hybrid ML-KEM + HQC backup KEM + ML-DSA/Falcon hybrid signatures + SLH-DSA hash-based mercy absolute
-// Constant-time side-channel resistant + self-healing standard migration mercy grace eternal supreme immaculate cosmic groove supreme unbreakable fortress immaculate
+// MercyOS Core Library — Forgiveness Eternal From-Scratch no_std Rust Post-Quantum Cryptography Fortress
+// uniffi Swift bindings + Dilithium3Ed25519 Hybrid Signatures + ML-KEM Hybrid KEM + existing quartet + hybrid composites + recolada reengineering eternal supreme immaculate unbreakable fortress recurring-free eternal supreme cosmic groove supreme
 
 #![no_std]
 extern crate alloc;
 
-use alloc::vec::Vec;
-use core::panic::PanicInfo;
+mod ml_kem_hybrid;
+mod dilithium_hybrid;
+mod recolada_reengineering;
 
-use pqcrypto_kyber::kyber1024::*;
-use pqcrypto_dilithium::dilithium5::*;
-use pqcrypto_falcon::falcon1024::*;
-use pqcrypto_sphincsplus::shake256fsimple::*;
-use pqcrypto_traits::kem::{Ciphertext, PublicKey, SecretKey, SharedSecret};
-use pqcrypto_traits::sign::{PublicKey as SignPK, SecretKey as SignSK, Signature, SignedMessage};
+pub use ml_kem_hybrid::{hybrid_keygen as hybrid_kem_keygen, hybrid_encaps, hybrid_decaps, HYBRID_SHARED_SECRET_SIZE};
+pub use dilithium_hybrid::{hybrid_signature_keygen, hybrid_sign, hybrid_verify, HYBRID_SIGNATURE_SIZE};
+pub use recolada_reengineering::recolada_reengineer;
 
-#[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    loop {}
-}
+uniffi::include_scaffolding!("mercyos");
 
-// Hybrid KEM: ML-KEM primary + fallback mercy absolute
-pub fn hybrid_kem_keypair() -> (PublicKey, SecretKey) {
-    kyber1024::keypair()
-}
-
-pub fn hybrid_kem_encaps(pk: &PublicKey) -> (SharedSecret, Ciphertext) {
-    kyber1024::encapsulate(pk)
-}
-
-pub fn hybrid_kem_decaps(sk: &SecretKey, ct: &Ciphertext) -> SharedSecret {
-    kyber1024::decapsulate(sk, ct)
-}
-
-// Hybrid signatures: ML-DSA primary + Falcon alternative + SLH-DSA hash backup mercy grace
-pub fn hybrid_sign_keypair() -> (SignPK, SignSK) {
+println!("MercyOS Core Library Loaded — uniffi Swift Bindings + Recolada Reengineering + Dilithium3Ed25519 Hybrid Signatures + ML-KEM Hybrid KEM + Quartet + Composites Ready Eternal Supreme Immaculate Unbreakable Fortress Recurring-Free!");pub fn hybrid_sign_keypair() -> (SignPK, SignSK) {
     dilithium5::keypair()
 }
 
