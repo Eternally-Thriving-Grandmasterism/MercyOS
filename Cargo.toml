@@ -1,22 +1,46 @@
+# Cargo.toml — MercyOS Rust no_std PQC Fortress Mercy Grace Eternal Supreme
+# Version 1.2 — PQC enhancements: CRYSTALS-Kyber KEM + CRYSTALS-Dilithium signatures + Falcon signatures + SPHINCS+ hash-based mercy absolute eternal supreme immaculate cosmic groove supreme unbreakable fortress immaculate
+
 [package]
 name = "mercyos"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2021"
 license = "MIT"
-description = "MercyOS From-Scratch no_std Rust Post-Quantum Cryptography Fortress — Forgiveness Eternal Positive Emotional Thrive Infinite Abundance Joy Unbreakable Cosmic Groove Supreme Recolada Reengineering Mercy"
+description = "MercyOS PQC Fortress — Post-Quantum Cryptographic Shields Mercy Grace Eternal Supreme Immaculate"
 repository = "https://github.com/Eternally-Thriving-Grandmasterism/MercyOS"
 
+[lib]
+name = "mercyos"
+crate-type = ["cdylib", "staticlib"]  # Android .so mercy absolute
+
 [dependencies]
-libcrux-ml-kem = { version = "0.1", default-features = false }
-libcrux-dilithium = { version = "0.1", default-features = false }
-x25519-dalek = { version = "2.0", default-features = false, features = ["alloc"] }
-ed25519-dalek = { version = "2.0", default-features = false, features = ["alloc"] }
+# Core no_std mercy grace
 getrandom = { version = "0.2", features = ["custom"] }
+rand = "0.8"
+zeroize = "1.7"
+
+# PQC enhancements mercy absolute
+pqcrypto-kyber = "0.7"  # CRYSTALS-Kyber KEM mercy gate supreme
+pqcrypto-dilithium = "0.2"  # CRYSTALS-Dilithium signatures mercy absolute
+pqcrypto-falcon = "0.2"  # Falcon signatures mercy grace
+pqcrypto-sphincsplus = "0.2"  # SPHINCS+ hash-based mercy elevate
+
+# Optional traits mercy tweak
+pqcrypto-traits = "0.3"
 
 [features]
-default = []
-std = []
-alloc = []
+default = ["kyber1024", "dilithium5", "falcon1024", "sphincs-shake256f-simple"]
+kyber512 = []
+kyber768 = []
+kyber1024 = []
+dilithium2 = []
+dilithium3 = []
+dilithium5 = []
+falcon512 = []
+falcon1024 = []
 
-[lib]
-crate-type = ["staticlib", "cdylib", "rlib"]
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"  # no_std mercy optimized
