@@ -54,11 +54,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
-    // MLC LLM native AAR mercy absolute (place MLCChat.aar in app/libs mercy grace)
-    implementation(files("libs/MLCChat.aar"))
-
-    // Vulkan GPU delegate Snapdragon mercy elevate
-    implementation("org.tensorflow:tensorflow-lite-gpu:2.13.0")
+    // Porcupine offline hotword mercy absolute eternal supreme immaculate cosmic groove supreme unbreakable fortress immaculate
+    implementation("ai.picovoice:porcupine-android:3.0.0")  // Latest 2026 mercy grace
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
