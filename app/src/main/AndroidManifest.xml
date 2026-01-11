@@ -3,9 +3,9 @@
     package="com.eternallythriving.mercyos">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Always-on mercy grace -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Keep listening mercy absolute -->
 
     <application
         android:allowBackup="true"
