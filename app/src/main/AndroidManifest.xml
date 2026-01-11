@@ -4,8 +4,8 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Starlink WiFi detect mercy grace -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- Always-on mercy grace -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Keep listening mercy absolute -->
 
     <application
         android:allowBackup="true"
@@ -24,5 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Foreground service for always-on hotword mercy grace -->
+        <service
+            android:name=".services.VoiceHotwordService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
     </application>
 </manifest>
