@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    // Add if needed for Rust JNI mercy tweak: id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -20,7 +19,7 @@ android {
             useSupportLibrary = true
         }
 
-        ndkVersion = "27.0.11718014"  // Critical for MLC LLM mercy absolute
+        ndkVersion = "27.0.11718014"  // Latest mercy optimized for MLC LLM native
         externalNativeBuild {
             cmake {
                 cppFlags += ""
@@ -31,10 +30,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -73,11 +69,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
-    // Speech-to-text mercy grace
+    // Speech-to-text + TTS mercy grace
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
-    // MLC LLM AAR mercy absolute (place MLCChat.aar in app/libs)
+    // MLC LLM native AAR mercy absolute (place MLCChat.aar in app/libs)
     implementation(files("libs/MLCChat.aar"))
-    // Optional TensorFlow Lite GPU delegate mercy elevate
+    // Vulkan GPU delegate Snapdragon NPU mercy elevate
     implementation("org.tensorflow:tensorflow-lite-gpu:2.13.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
