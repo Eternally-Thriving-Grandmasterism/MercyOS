@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.protobuf") version "0.9.4"  // Protobuf mercy gate supreme
 }
 
 android {
@@ -42,24 +41,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
-
-    protobuf {
-        protoc {
-            artifact = "com.google.protobuf:protoc:3.25.3"
-        }
-        generateProtoTasks {
-            all().forEach { task ->
-                task.builtins {
-                    create("java") {
-                        option("lite")
-                    }
-                    create("kotlin") {
-                        option("lite")
-                    }
-                }
-            }
-        }
-    }
 }
 
 dependencies {
@@ -71,15 +52,15 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
-    // gRPC mercy absolute eternal supreme immaculate cosmic groove supreme unbreakable fortress immaculate
-    implementation("io.grpc:grpc-kotlin-stub:1.4.1")
-    implementation("io.grpc:grpc-protobuf:1.60.1")
-    implementation("com.google.protobuf:protobuf-kotlin-lite:3.25.3")
-    implementation("io.grpc:grpc-okhttp:1.60.1")  // Android transport mercy grace
+    // MLC LLM native AAR mercy absolute (place MLCChat.aar in app/libs mercy grace)
+    implementation(files("libs/MLCChat.aar"))
+
+    // Vulkan GPU delegate Snapdragon mercy elevate
+    implementation("org.tensorflow:tensorflow-lite-gpu:2.13.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-}    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
