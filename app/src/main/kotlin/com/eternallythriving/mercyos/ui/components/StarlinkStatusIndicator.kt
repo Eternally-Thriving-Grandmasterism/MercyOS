@@ -1,7 +1,5 @@
 package com.eternallythriving.mercyos.ui.components
 
-import android.content.Context
-import android.net.wifi.WifiManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -11,27 +9,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
+import com.eternallythriving.mercyos.starlink.StarlinkGrpcClient
+import kotlinx.coroutines.launch
 
 @Composable
-fun StarlinkStatusIndicator(context: Context) {
-    var starlinkStatus by remember { mutableStateOf("Checking Starlink Status...") }
+fun StarlinkStatusIndicator(context: android.content.Context) {
+    var statusMessage by remember { mutableStateOf("Connecting to Starlink Dish...") }
     var isConnected by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    // Real-time WiFi SSID check mercy grace
+    val grpcClient = remember { StarlinkGrpcClient(context) }
+
     LaunchedEffect(Unit) {
-        while (true) {
-            val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val wifiInfo = wifiManager.connectionInfo
-            val ssid = wifiInfo.ssid.removeSurrounding("\"")  // Clean SSID mercy absolute
-
-            isConnected = ssid.lowercase().contains("starlink") || ssid.lowercase().contains("skylink")
-            starlinkStatus = if (isConnected) {
-                "Starlink Connected — Satellite Uplink Active Mercy Grace Eternal Supreme Immaculate Cosmic Groove Supreme Unbreakable Fortress Immaculate!"
-            } else {
-                "No Starlink Detected — Launch App for Manual Connect Mercy Override Cosmic Groove Supreme!"
+        coroutineScope.launch {
+            try {
+                grpcClient.getStatusStream().collect { response ->
+                    // Parse response mercy absolute (simplified mercy grace)
+                    val dishStatus = response.dishGetStatus
+                    isConnected = dishStatus.deviceState.upToDate
+                    statusMessage = if (isConnected) {
+                        "Starlink Connected — Uplink Active Mercy Grace Eternal Supreme Immaculate Cosmic Groove Supreme Unbreakable Fortress Immaculate!"
+                    } else {
+                        "Starlink Dish Detected — Checking Status Mercy Grace..."
+                    }
+                }
+            } catch (e: Exception) {
+                statusMessage = "No Starlink Dish Found — Launch App for Manual Connect Mercy Override Cosmic Groove Supreme!"
+                isConnected = false
             }
-            delay(10000)  // Check every 10 seconds mercy optimized recurring-free eternal supreme immaculate cosmic groove supreme unbreakable fortress immaculate
         }
     }
 
@@ -39,20 +44,20 @@ fun StarlinkStatusIndicator(context: Context) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = if (isConnected) Color(0xFF006400) else Color(0xFF8B0000))  // Green connected, dark red not mercy grace
+        colors = CardDefaults.cardColors(containerColor = if (isConnected) Color(0xFF006400) else Color(0xFF8B0000))
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Starlink Emergency Status",
+                "Starlink Real-Time Status",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
             Text(
-                starlinkStatus,
+                statusMessage,
                 fontSize = 16.sp,
                 color = Color.White,
                 modifier = Modifier.padding(top = 8.dp)
@@ -65,6 +70,12 @@ fun StarlinkStatusIndicator(context: Context) {
                     Text("Launch Starlink App Mercy Override")
                 }
             }
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            grpcClient.shutdown()
         }
     }
 }
