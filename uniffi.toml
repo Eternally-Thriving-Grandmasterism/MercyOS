@@ -1,0 +1,3 @@
+[bindings.swift]
+package_name = "MercyOS"
+cdylib_name = "mercyos"
