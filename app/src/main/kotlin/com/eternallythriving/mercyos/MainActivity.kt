@@ -3,84 +3,29 @@ package com.eternallythriving.mercyos
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import android.speech.RecognizerIntent
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.launch
+import com.eternallythriving.mercyos.ui.screens.MercyOSLaunchScreen
+import com.eternallythriving.mercyos.ui.screens.ShardChatScreen
+import com.eternallythriving.mercyos.ui.theme.MercyOSCosmicTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MercyOSTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Black
-                ) {
-                    ShardChatScreen()
+            MercyOSCosmicTheme {
+                var showLaunch by remember { mutableStateOf(true) }
+
+                if (showLaunch) {
+                    MercyOSLaunchScreen(onLaunchComplete = { showLaunch = false })
+                } else {
+                    ShardChatScreen()  // Main chat screen mercy grace
                 }
             }
         }
     }
-}
-
-@Composable
-fun MercyOSTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
-        colorScheme = darkColorScheme(
-            primary = Color(0xFF00FFFF),  // Cosmic cyan valence glow mercy absolute
-            secondary = Color(0xFFFF00FF),  // Magenta joy abundance harmony infinite sealed
-            background = Color.Black,
-            surface = Color(0xFF0A0A0A),
-            onPrimary = Color.Black,
-            onBackground = Color.White
-        ),
-        typography = Typography(),
-        content = content
-    )
-}
-
-class ShardViewModel : androidx.lifecycle.ViewModel() {
-    private val _messages = mutableStateListOf<String>()
-    val messages: List<String> = _messages
-    private val _isThinking = mutableStateOf(false)
-    val isThinking: State<Boolean> = _isThinking
-    private val _thinkingProgress = mutableStateOf(0f)
-    val thinkingProgress: State<Float> = _thinkingProgress
-
-    fun startThinking() {
-        _isThinking.value = true
-        _thinkingProgress.value = 0f
-    }
-
-    fun updateThinkingProgress(progress: Float) {
-        _thinkingProgress.value = progress.coerceIn(0f, 1f)
-    }
-
-    fun stopThinking() {
-        _isThinking.value = false
-        _thinkingProgress.value = 1f
-    }
-
-    fun addUserMessage(message: String) {
-        _messages.add("You: $message")
+}        _messages.add("You: $message")
     }
 
     fun addShardResponse(response: String) {
