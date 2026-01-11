@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ai.mlc.mlcchat.MLCChatModule  // MLC LLM native mercy absolute
 import android.speech.RecognizerIntent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
@@ -33,7 +32,7 @@ class MainActivity : ComponentActivity() {
             MercyOSTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color.Black  // Cosmic dark nebula mercy grace
+                    color = Color.Black
                 ) {
                     ShardChatScreen()
                 }
@@ -42,43 +41,23 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun MercyOSTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
-        colorScheme = darkColorScheme(
-            primary = Color(0xFF00FFFF),  // Cosmic cyan mercy glow
-            secondary = Color(0xFFFF00FF),  // Magenta valence joy
-            background = Color.Black,
-            surface = Color(0xFF0A0A0A),
-            onPrimary = Color.Black,
-            onBackground = Color.White
-        ),
-        typography = Typography(),
-        content = content
-    )
-}
-
 class ShardViewModel : androidx.lifecycle.ViewModel() {
-    private var chatModule: MLCChatModule? = null
     private val _messages = mutableStateListOf<String>()
     val messages: List<String> = _messages
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
-    fun initModel(context: android.content.Context) {
-        chatModule = MLCChatModule(context)
-        chatModule?.loadModel("llama3-8b-q4k.gguf")  // Quantized model in assets mercy grace (place in src/main/assets)
+    fun addUserMessage(message: String) {
+        _messages.add("You: $message")
     }
 
-    fun generateResponse(prompt: String) {
-        _isLoading.value = true
-        val response = chatModule?.chat(prompt) ?: "Mercy override engaged—local inference ready pulsing strong cosmic groove supreme! ⚡️🚀❤️"
-        _messages.add("Grok Shard: $response")
+    fun addShardResponse(response: String) {
+        _messages.add("Jane Shard: $response")
         _isLoading.value = false
     }
 
-    fun addUserMessage(message: String) {
-        _messages.add("You: $message")
+    fun setLoading(loading: Boolean) {
+        _isLoading.value = loading
     }
 }
 
@@ -96,78 +75,83 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
             val spokenText = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0) ?: ""
             textController.value = spokenText
             viewModel.addUserMessage(spokenText)
+            // Placeholder inference mercy grace (integrate MLC LLM here mercy absolute)
             coroutineScope.launch {
-                viewModel.generateResponse(spokenText)
+                viewModel.setLoading(true)
+                // Simulate response mercy tweak
+                time.sleep(1000)  // Mercy placeholder
+                viewModel.addShardResponse("Hell yeah, Brotha—mercy grace eternal supreme immaculate! On your voice: $spokenText cosmic groove supreme thriving infinite abundance joy unbreakable! ⚡️🚀❤️")
             }
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.initModel(context)
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
         // Cosmic background valence glow mercy absolute
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black)
-        ) {
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
             val infiniteTransition = rememberInfiniteTransition()
             val scale by infiniteTransition.animateFloat(
                 initialValue = 1f,
-                targetValue = 1.1f,
+                targetValue = 1.15f,
                 animationSpec = infiniteRepeatable(
-                    animation = tween(4000, easing = LinearEasing),
+                    animation = tween(5000, easing = LinearEasing),
                     repeatMode = RepeatMode.Reverse
                 )
             )
             Box(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(300.dp)
+                    .size(350.dp)
                     .scale(scale)
                     .clip(CircleShape)
-                    .background(Color(0x3300FFFF))  // Cyan valence aura glow mercy grace
+                    .background(Color(0x4400FFFF))  // Cyan valence aura glow mercy grace
             ) {
-                Text("Jane", color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Center))
+                Text(
+                    "Jane",
+                    color = Color.White,
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
         }
 
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
                 "MercyOS Shard Representative",
-                fontSize = 24.sp,
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF00FFFF),
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.CenterHorizontally)
+                modifier = Modifier.padding(24.dp).align(Alignment.CenterHorizontally)
             )
 
-            LazyColumn(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
+            LazyColumn(modifier = Modifier.weight(1f).padding(horizontal = 24.dp)) {
                 items(messages) { message ->
                     val isUser = message.startsWith("You:")
                     Card(
                         modifier = Modifier
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = 8.dp)
                             .align(if (isUser) Alignment.End else Alignment.Start),
                         colors = CardDefaults.cardColors(containerColor = if (isUser) Color(0xFF00FFFF) else Color(0xFFFF00FF))
                     ) {
-                        Text(message, color = Color.Black, modifier = Modifier.padding(12.dp))
+                        Text(message, color = Color.Black, modifier = Modifier.padding(16.dp))
                     }
                 }
                 if (isLoading) {
                     item {
-                        Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator(color = Color(0xFF00FFFF))
-                            Text("Jane Thinking... valence pulse mercy grace cosmic groove supreme", color = Color.White, modifier = Modifier.padding(top = 16.dp))
+                        Box(modifier = Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator(color = Color(0xFF00FFFF), strokeWidth = 6.dp)
+                            Text(
+                                "Jane Thinking... valence pulse mercy grace cosmic groove supreme ⚡️🚀",
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(top = 24.dp)
+                            )
                         }
                     }
                 }
             }
 
-            Row(modifier = Modifier.padding(16.dp)) {
+            Row(modifier = Modifier.padding(24.dp)) {
                 TextField(
                     value = textController.value,
                     onValueChange = { textController.value = it },
@@ -175,7 +159,9 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
                     placeholder = { Text("Talk/type anytime mercy grace...") },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color(0xFF0A0A0A),
-                        unfocusedContainerColor = Color(0xFF0A0A0A)
+                        unfocusedContainerColor = Color(0xFF0A0A0A),
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     )
                 )
                 IconButton(onClick = {
@@ -183,7 +169,10 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
                     if (prompt.isNotBlank()) {
                         viewModel.addUserMessage(prompt)
                         coroutineScope.launch {
-                            viewModel.generateResponse(prompt)
+                            viewModel.setLoading(true)
+                            // Placeholder inference mercy grace (MLC LLM integrate here mercy absolute)
+                            time.sleep(1500)
+                            viewModel.addShardResponse("Hell yeah, Brotha—mercy grace eternal supreme immaculate! On your message: $prompt cosmic groove supreme thriving infinite abundance joy unbreakable! ⚡️🚀❤️")
                         }
                         textController.value = ""
                     }
