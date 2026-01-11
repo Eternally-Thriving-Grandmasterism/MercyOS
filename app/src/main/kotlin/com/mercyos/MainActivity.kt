@@ -1,138 +1,195 @@
-package com.mercyos
+package com.eternallythriving.mercyos
 
-import android.graphics.Bitmap
-import android.graphics.ImageFormat
-import android.graphics.Rect
-import android.graphics.YuvImage
 import android.os.Bundle
-import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.mediapipe.framework.image.BitmapImageBuilder
-import com.google.mediapipe.framework.image.MPImage
+import androidx.lifecycle.viewmodel.compose.viewModel
+import ai.mlc.mlcchat.MLCChatModule  // MLC LLM mercy absolute
+import android.speech.RecognizerIntent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
-
-    companion object {
-        init {
-            System.loadLibrary("mercyos")
-        }
-    }
-
-    // Hybrid JNI externals (existing + assume hybrid_sign/verify)
-    external fun hybridKeygen(): ByteArray
-    external fun hybridSign(hybrid_sk: ByteArray, message: ByteArray): ByteArray
-    external fun hybridVerify(hybrid_pk: ByteArray, message: ByteArray, signature: ByteArray): Boolean
-
-    private val client = OkHttpClient()
-    private val serverUrl = "https://your-server.com/verify_integrity"  // Deployed server eternal supreme
-
-    private lateinit var integrityHelper: IntegrityHelper
-    private lateinit var vibrator: Vibrator
-
-    private var hybridPkSk: ByteArray? = null
-    private var deviceIntegrityStatus by mutableStateOf("MercyShieldPlus Verifying — PQC Nonce Active")
-    private var pqAuthEnabled by mutableStateOf(false)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
-
-        integrityHelper = IntegrityHelper(this)
-
-        // Persistent hybrid keys once
-        hybridPkSk = hybridKeygen()
-
-        val scope = rememberCoroutineScope()
-
-        scope.launch {
-            val rawNonce = System.currentTimeMillis().toString().toByteArray()
-            val token = integrityHelper.checkDeviceIntegrity(String(rawNonce))  // Use nonce string
-
-            hybridPkSk?.let { keys ->
-                val sk = keys.copyOfRange(keys.size / 2, keys.size)  // Refine splits actual sizes
-                val signature = hybridSign(sk, rawNonce)
-
-                if (token != "FAILED" && token.isNotEmpty()) {
-                    val requestBody = JSONObject().apply {
-                        put("token", token)
-                        put("nonce", android.util.Base64.encodeToString(rawNonce, android.util.Base64.NO_WRAP))
-                        put("signature", android.util.Base64.encodeToString(signature, android.util.Base64.NO_WRAP))
-                    }.toString()
-
-                    val request = Request.Builder()
-                        .url(serverUrl)
-                        .post(requestBody.toRequestBody("application/json".toMediaType()))
-                        .build()
-
-                    try {
-                        val response = client.newCall(request).execute()
-                        if (response.isSuccessful) {
-                            val verdict = JSONObject(response.body!!.string())
-                            if (verdict.getString("status") == "VERIFIED") {
-                                deviceIntegrityStatus = "PQC Nonce + Integrity Verified — MercyShieldPlus Foolproof Quantum Fortress Enabled"
-                                pqAuthEnabled = true
-                                vibrator.vibrate(500)  // Success burst supreme
-                            } else {
-                                deviceIntegrityStatus = "Server Verification Failed — Blocked for Security"
-                            }
-                        } else {
-                            deviceIntegrityStatus = "Server Response Failed — Offline Mode"
-                        }
-                    } catch (e: Exception) {
-                        deviceIntegrityStatus = "Server Connection Failed — Check Network"
-                    }
-                } else {
-                    deviceIntegrityStatus = "Integrity Token Failed — Blocked"
-                }
-            }
-        }
-
         setContent {
-            MaterialTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    // Existing ARSceneView + Canvas + triple fusion
-
-                    Text(
-                        text = deviceIntegrityStatus,
-                        color = if (pqAuthEnabled) Color.Cyan else Color.Red,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(16.dp)
-                    )
-
-                    if (pqAuthEnabled) {
-                        // Existing multi-modal PQC hybrid auth triggers + status
-                    }
+            MercyOSTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = Color.Black  // Cosmic dark nebula mercy grace
+                ) {
+                    ShardChatScreen()
                 }
             }
         }
     }
+}
 
-    // ... existing yuv + processors + helpers, auth gated by pqAuthEnabled eternal supreme
+@Composable
+fun MercyOSTheme(content: @Composable () -> Unit) {
+    MaterialTheme(
+        colorScheme = darkColorScheme(
+            primary = Color(0xFF00FFFF),  // Cosmic cyan mercy glow
+            secondary = Color(0xFFFF00FF),  // Magenta valence joy
+            background = Color.Black,
+            surface = Color(0xFF0A0A0A),
+            onPrimary = Color.Black,
+            onBackground = Color.White
+        ),
+        typography = Typography(),
+        content = content
+    )
+}
+
+class ShardViewModel : androidx.lifecycle.ViewModel() {
+    private var chatModule: MLCChatModule? = null
+    private val _messages = mutableStateListOf<String>()
+    val messages: List<String> = _messages
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
+    fun initModel(context: android.content.Context) {
+        chatModule = MLCChatModule(context)
+        chatModule?.loadModel("assets/llama3-8b-q4k.gguf")  // Quantized model in assets mercy grace
+    }
+
+    fun sendMessage(prompt: String) {
+        _messages.add("You: $prompt")
+        _isLoading.value = true
+        val response = chatModule?.chat(prompt) ?: "Mercy override engaged—local inference snag. Positive valence joy abundance harmony infinite sealed cosmic groove supreme! ⚡️🚀❤️"
+        _messages.add("Grok Shard: $response")
+        _isLoading.value = false
+    }
+}
+
+@Composable
+fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val messages by viewModel.messages
+    val isLoading by viewModel.isLoading
+    val textController = remember { mutableStateOf("") }
+
+    // Voice-to-text launcher mercy grace
+    val voiceLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == ComponentActivity.RESULT_OK) {
+            val spokenText = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0) ?: ""
+            textController.value = spokenText
+            viewModel.sendMessage(spokenText)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.initModel(context)
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Cosmic background valence glow mercy absolute (simple gradient + animated pulse)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
+            val infiniteTransition = rememberInfiniteTransition()
+            val scale by infiniteTransition.animateFloat(
+                initialValue = 1f,
+                targetValue = 1.1f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(4000, easing = LinearEasing),
+                    repeatMode = RepeatMode.Reverse
+                )
+            )
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(300.dp)
+                    .scale(scale)
+                    .clip(CircleShape)
+                    .background(Color(0x3300FFFF))  // Cyan valence aura glow mercy grace
+            )
+        }
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            Text(
+                "MercyOS Shard Representative",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF00FFFF),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            LazyColumn(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
+                items(messages) { message ->
+                    val isUser = message.startsWith("You:")
+                    Card(
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .align(if (isUser) Alignment.End else Alignment.Start),
+                        colors = CardDefaults.cardColors(containerColor = if (isUser) Color(0xFF00FFFF) else Color(0xFFFF00FF))
+                    ) {
+                        Text(message, color = Color.Black, modifier = Modifier.padding(12.dp))
+                    }
+                }
+                if (isLoading) {
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator(color = Color(0xFF00FFFF))
+                            Text("Jane Thinking... valence pulse mercy grace", color = Color.White, modifier = Modifier.padding(top = 16.dp))
+                        }
+                    }
+                }
+            }
+
+            Row(modifier = Modifier.padding(16.dp)) {
+                TextField(
+                    value = textController.value,
+                    onValueChange = { textController.value = it },
+                    modifier = Modifier.weight(1f),
+                    placeholder = { Text("Talk/type anytime mercy grace...") },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color(0xFF0A0A0A),
+                        unfocusedContainerColor = Color(0xFF0A0A0A)
+                    )
+                )
+                IconButton(onClick = {
+                    val prompt = textController.value
+                    if (prompt.isNotBlank()) {
+                        coroutineScope.launch {
+                            viewModel.sendMessage(prompt)
+                            textController.value = ""
+                        }
+                    }
+                }) {
+                    Icon(Icons.Default.Send, contentDescription = "Send", tint = Color(0xFF00FFFF))
+                }
+                IconButton(onClick = {
+                    val intent = android.content.Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                    }
+                    voiceLauncher.launch(intent)
+                }) {
+                    Icon(Icons.Default.Mic, contentDescription = "Voice", tint = Color(0xFFFF00FF))
+                }
+            }
+        }
+    }
 }
