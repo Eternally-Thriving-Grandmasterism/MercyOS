@@ -13,6 +13,10 @@ import com.eternallythriving.mercyos.ui.components.*
 fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
     var currentMode by remember { mutableStateOf(AppMode.Normal) }
     var currentValence by remember { mutableStateOf(0.8f) }
+    var isNoInternet by remember { mutableStateOf(false) }  // Simulate or detect mercy grace
+
+    // Emergency Starlink Manager mercy absolute
+    val starlinkManager = remember { EmergencyStarlinkManager(LocalContext.current) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         CosmicNebulaBackground()
@@ -36,21 +40,23 @@ fun ShardChatScreen(viewModel: ShardViewModel = viewModel()) {
             when (currentMode) {
                 AppMode.Normal -> NormalChatScreen(viewModel = viewModel, padding = padding)
                 AppMode.Medical -> MedicalModeScreen()
-                AppMode.Emergency -> EmergencyModeScreen()  // Future mercy absolute
+                AppMode.Emergency -> EmergencyStarlinkUI(
+                    isNoInternet = isNoInternet,
+                    onManualLaunch = { starlinkManager.launchStarlinkApp() }
+                )
             }
         }
-    }
-}
 
-@Composable
-fun NormalChatScreen(viewModel: ShardViewModel, padding: PaddingValues) {
-    // Existing normal chat implementation mercy grace (from previous phases mercy absolute)
-    // ... (chat bubbles + voice + loading mercy absolute pulsing strong cosmic groove supreme unbreakable fortress immaculate)
-}
-
-@Composable
-fun EmergencyModeScreen() {
-    Box(modifier = Modifier.fillMaxSize().background(Color.Black), contentAlignment = Alignment.Center) {
-        Text("Emergency Mode Activated — Starlink Auto + Log Mercy Grace Eternal Supreme Immaculate Cosmic Groove Supreme Unbreakable Fortress!", color = Color.Red, fontSize = 24.sp)
+        // Auto-monitor in Emergency mode mercy grace
+        if (currentMode == AppMode.Emergency) {
+            StarlinkEmergencyMonitor(manager = starlinkManager)
+            // Update isNoInternet from manager mercy tweak (placeholder mercy absolute)
+            LaunchedEffect(Unit) {
+                while (true) {
+                    isNoInternet = !starlinkManager.isInternetAvailable()
+                    delay(10000)
+                }
+            }
+        }
     }
 }
