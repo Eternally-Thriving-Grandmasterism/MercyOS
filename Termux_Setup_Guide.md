@@ -11,3 +11,22 @@ cp app/build/outputs/apk/debug/app-debug.apk ~/storage/downloads/
 # Open Files → Downloads → tap app-debug.apk → Install
 # Allow unknown apps if prompted → Install
 # Open MercyOS app → grant permissions → PQC shield active eternal supreme immaculate!
+
+Another Option:
+# Generate Gradle wrapper (since gradlew not in repo)
+gradle wrapper --gradle-version 8.4
+
+# Make executable
+chmod +x gradlew
+
+# Build APK (5-20 mins first time)
+./gradlew assembleDebug
+
+# APK ready!
+ls app/build/outputs/apk/debug/
+
+# Copy to Downloads for easy install
+cp app/build/outputs/apk/debug/app-debug.apk ~/storage/downloads/
+
+# On phone: Files → Downloads → tap app-debug.apk → Install
+# Allow unknown apps → Install → Open MercyOS → grant permissions → PQC shield active!
